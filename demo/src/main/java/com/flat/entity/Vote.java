@@ -1,0 +1,60 @@
+package com.flat.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class Vote {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long Id;
+
+    private boolean isUpvote;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User votedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "complaint_id", nullable = false)
+    private Complaints complaint;
+
+    public long getId() {
+        return Id;
+    }
+
+    public void setId(long id) {
+        Id = id;
+    }
+
+    public boolean isUpvote() {
+        return isUpvote;
+    }
+
+    public void setUpvote(boolean upvote) {
+        isUpvote = upvote;
+    }
+
+    public User getVotedBy() {
+        return votedBy;
+    }
+
+    public void setVotedBy(User votedBy) {
+        this.votedBy = votedBy;
+    }
+
+    public Complaints getComplaint() {
+        return complaint;
+    }
+
+    public void setComplaint(Complaints complaint) {
+        this.complaint = complaint;
+    }
+}
