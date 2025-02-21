@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/auth/")
 public class UserController {
 
     @Autowired
@@ -24,12 +24,6 @@ public class UserController {
     private JwtService jwtService;
     @Autowired
     private UserRepository userRepository;
-
-    @PostMapping("/create")
-    public Optional<User> createUser(@RequestBody User user){
-
-        return Optional.ofNullable(userService.createUser(user));
-    }
 
     @PutMapping("/update")
     public User updateUser(@RequestBody User user){
@@ -47,7 +41,7 @@ public class UserController {
 
         String userName = jwtService.extractUserName(token.substring(7));
         User user =(User)  userRepository.findByEmail(userName);
-        if(user != null && user.getRole().equals(Role.ADMIN)){
+        if(user != null && user.getRole().equals(Role.ADMIN)|| user.getRole().equals(Role.USER)){
 
             return ResponseEntity.ok(userService.getAllUsers());
         }

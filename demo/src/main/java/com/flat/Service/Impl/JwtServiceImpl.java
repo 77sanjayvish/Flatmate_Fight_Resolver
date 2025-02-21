@@ -1,6 +1,7 @@
 package com.flat.Service.Impl;
 
 import com.flat.Service.JwtService;
+import com.flat.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -51,7 +52,12 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Claims extractAllClaim(String token) {
-        return Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
+        return Jwts.
+                parserBuilder().
+                setSigningKey(getSignKey())
+                .build().
+                parseClaimsJws(token)
+                .getBody();
     }
 
     private Key getSignKey(){
@@ -60,12 +66,9 @@ public class JwtServiceImpl implements JwtService {
         return Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        if (token == null || userDetails == null || userDetails.getUsername() == null) {
-            return false; // Ensure inputs are valid
-        }
+    public boolean isTokenValid(String token , UserDetails userDetails){
         final String username = extractUserName(token);
-        return username != null && username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
 

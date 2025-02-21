@@ -3,7 +3,6 @@ package com.flat.Service.Impl;
 
 import com.flat.Service.ComplaintService;
 import com.flat.entity.Complaints;
-import com.flat.payload.ComplaintDto;
 import com.flat.repository.ComplaintRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,20 +15,10 @@ public class ComplaintServiceImpl implements ComplaintService {
     @Autowired
     private ComplaintRepository complaintRepository;
 
-
-
     @Override
-    public Complaints fileComplaint(ComplaintDto complaintDTO) {
-        Complaints comp = new Complaints();
-        comp.setTitle(complaintDTO.getTitle());
-        comp.setComplainType(complaintDTO.getComplainType());
-        comp.setDescription(complaintDTO.getDescription());
-        comp.setLocalDateTime(complaintDTO.getLocalDateTime());
-        comp.setResolved(complaintDTO.isResolved());
-        comp.setDownVotes(complaintDTO.getDownVotes());
-        comp.setUpVotes(complaintDTO.getUpVotes());
-        comp.getSeverityLevel(complaintDTO.getSeverityLevel());
-        return complaintRepository.save(comp);
+    public Complaints fileComplaint(Complaints complaints) {
+        System.out.println(complaints);
+        return complaintRepository.save(complaints);
     }
 
     @Override

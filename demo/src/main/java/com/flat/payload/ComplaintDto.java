@@ -103,4 +103,19 @@ public class ComplaintDto {
         this.downVotes = downVotes;
         this.filedByUserId = filedByUserId;
     }
+
+    @Override
+    public String toString() {
+        return "ComplaintDto{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", complainType=" + complainType +
+                ", severityLevel=" + severityLevel +
+                ", resolved=" + resolved +
+                ", localDateTime=" + localDateTime +
+                ", upVotes=" + upVotes +
+                ", downVotes=" + downVotes +
+                ", filedByUserId=" + filedByUserId +
+                '}';
+    }
 }

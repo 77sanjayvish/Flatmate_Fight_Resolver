@@ -30,18 +30,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**")
-                        .permitAll()
-                        .requestMatchers("/api/v1/Admin")
-                        .hasAnyAuthority((Role.ADMIN.name()))
-                        .requestMatchers("/api/v1/User/").hasAnyAuthority(Role.USER.name())
-                        //.requestMatchers("/api/v1/books/").hasAnyAuthority()
+                .authorizeHttpRequests(request -> request.requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/complaints").hasAuthority("USER")
+                        .requestMatchers("/api/complaints/**").hasAuthority("USER")
+                        .requestMatchers("/api/leaderboard").authenticated()
+                        .requestMatchers("/api/votes/").authenticated()
+                        .requestMatchers("/api/flat/stats").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider()).addFilterBefore(
-                        jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class
-                );
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return httpSecurity.build();
     }
 
