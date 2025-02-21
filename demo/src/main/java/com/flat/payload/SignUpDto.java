@@ -1,18 +1,36 @@
 package com.flat.payload;
 
+import com.flat.entity.Vote;
 import com.flat.enums.Role;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Data
+import java.util.List;
+
+
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class SignUpDto {
+
     private String username;
     private String email;
     private String password;
     private String flatCode;
     private int karmaPoints;
     private Role role;
+    private List<Vote> votes;
+
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
+    }
 
     public String getUsername() {
         return username;
@@ -62,26 +80,4 @@ public class SignUpDto {
         this.role = role;
     }
 
-    public SignUpDto() {
-    }
-
-    public SignUpDto(String username, String email, String password, String flatCode, int karmaPoints, Role role) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.flatCode = flatCode;
-        this.karmaPoints = karmaPoints;
-        this.role = role;
-    }
-
-    @Override
-    public String toString() {
-        return "SignUpDto{" +
-                "username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", flatCode='" + flatCode + '\'' +
-                ", karmaPoints=" + karmaPoints +
-                ", role=" + role +
-                '}';
-    }
 }

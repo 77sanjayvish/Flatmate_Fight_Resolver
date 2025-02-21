@@ -1,5 +1,7 @@
 package com.flat.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flat.enums.ComplaintType;
 import com.flat.enums.SeverityLevel;
 import jakarta.persistence.*;
@@ -26,7 +28,7 @@ public class Complaints {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private ComplaintType ComplainType;
+    private ComplaintType complainType;
 
     @Enumerated(EnumType.STRING)
     private SeverityLevel severityLevel;
@@ -40,10 +42,15 @@ public class Complaints {
     private int downVotes;
 
     @ManyToOne
-    @JoinColumn(name = "user_id" , nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User filedBy;
-    @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Vote> votes = new ArrayList<>();
+
+
 
     public long getId() {
         return id;
@@ -70,15 +77,15 @@ public class Complaints {
     }
 
     public ComplaintType getComplainType() {
-        return ComplainType;
+        return complainType;
     }
 
     public void setComplainType(ComplaintType complainType) {
-        ComplainType = complainType;
+        this.complainType = complainType;
     }
 
-    public SeverityLevel getSeverityLevel(SeverityLevel severityLevel) {
-        return this.severityLevel;
+    public SeverityLevel getSeverityLevel() {
+        return severityLevel;
     }
 
     public void setSeverityLevel(SeverityLevel severityLevel) {

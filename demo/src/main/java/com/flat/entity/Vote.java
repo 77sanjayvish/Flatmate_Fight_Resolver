@@ -15,8 +15,7 @@ public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long Id;
-
-    private boolean isUpvote;
+    private boolean upVote;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -34,12 +33,12 @@ public class Vote {
         Id = id;
     }
 
-    public boolean isUpvote() {
-        return isUpvote;
+    public boolean isUpVote() {
+        return upVote;
     }
 
-    public void setUpvote(boolean upvote) {
-        isUpvote = upvote;
+    public void setUpVote(boolean upVote) {
+        this.upVote = upVote;
     }
 
     public User getVotedBy() {

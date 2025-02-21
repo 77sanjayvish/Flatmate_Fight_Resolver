@@ -1,5 +1,6 @@
 package com.flat.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.flat.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,9 +14,6 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 @Table(name = "User_Flat")
 public class User implements UserDetails {
 
@@ -23,7 +21,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(unique = true ,nullable = false)
-    private String username;
+    private String userName;
 
     @Column(unique = true ,nullable = false)
     private String email;
@@ -34,19 +32,84 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     private String password;
 
-    private int karmaPoints;
+    @Column(nullable = false)
+    private int kPoints;
+
     @Enumerated(EnumType.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Role role;
 
     @OneToMany(mappedBy = "filedBy" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Complaints> complaints = new ArrayList<>();
 
     @OneToMany(mappedBy = "votedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Transient
     private List<Vote> votes = new ArrayList<>();
 
     public User() {
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
+                ", flatCode='" + flatCode + '\'' +
+                ", password='" + password + '\'' +
+                ", kPoints=" + kPoints +
+                ", role=" + role +
+                ", complaints=" + complaints +
+                ", votes=" + votes +
+                '}';
+    }
+
+    public User(long id, String userName, String email, String flatCode, String password, int kPoints, Role role, List<Complaints> complaints, List<Vote> votes) {
+        this.id = id;
+        this.userName = userName;
+        this.email = email;
+        this.flatCode = flatCode;
+        this.password = password;
+        this.kPoints = kPoints;
+        this.role = role;
+        this.complaints = complaints;
+        this.votes = votes;
+    }
     public long getId() {
         return id;
     }
@@ -55,13 +118,12 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    @Override
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {
@@ -80,21 +142,16 @@ public class User implements UserDetails {
         this.flatCode = flatCode;
     }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public int getKarmaPoints() {
-        return karmaPoints;
+    public int getkPoints() {
+        return kPoints;
     }
 
-    public void setKarmaPoints(int karmaPoints) {
-        this.karmaPoints = karmaPoints;
+    public void setkPoints(int kPoints) {
+        this.kPoints = kPoints;
     }
 
     public Role getRole() {
@@ -120,30 +177,4 @@ public class User implements UserDetails {
     public void setVotes(List<Vote> votes) {
         this.votes = votes;
     }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
 }
