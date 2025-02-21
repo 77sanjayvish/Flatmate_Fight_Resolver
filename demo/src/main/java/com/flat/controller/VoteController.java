@@ -29,10 +29,13 @@ public class VoteController {
     @PostMapping("/create")
     public ResponseEntity<Vote> createVote(@RequestBody VoteRequest voteRequest) {
         // Fetch User and Complaint entities
+        int id = (int) voteRequest.getVotedById();
         User user = userRepository.findById(voteRequest.getVotedById())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        System.out.println(user);
         Complaints complaint = complaintRepository.findById(voteRequest.getComplaintId())
                 .orElseThrow(() -> new RuntimeException("Complaint not found"));
+        System.out.println(complaint);
         // Create and save Vote entity
         Vote vote = new Vote();
         vote.setUpVote(voteRequest.isUpVote());
