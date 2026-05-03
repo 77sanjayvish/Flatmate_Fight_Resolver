@@ -6,12 +6,10 @@ import com.flat.entity.User;
 import com.flat.payload.ComplaintDto;
 import com.flat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/complaints")
@@ -24,16 +22,25 @@ public class ComplaintController {
     private UserRepository userRepository;
 
     @PostMapping("/create")
-    public ResponseEntity<Complaints> createComplaint(@RequestBody Complaints complaint) {
-        // Check if filedBy is not null
-        if (complaint.getFiledBy() != null) {
-            User userId = complaint.getFiledBy();
-            User user = (User) userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            complaint.setFiledBy(user); // Set the User entity before saving
-        } else {
+    public ResponseEntity<Complaints> createComplaint(@RequestBody ComplaintDto complaintDto) {
+        if (complaintDto.getFiledByUserId() == null) {
             throw new RuntimeException("FiledBy (User) is required");
         }
+        User user = (User) userRepository.findById(complaintDto.getFiledByUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Complaints complaint = new Complaints();
+        complaint.setTitle(complaintDto.getTitle());
+        complaint.setDescription(complaintDto.getDescription());
+        complaint.setComplainType(complaintDto.getComplainType());
+        complaint.setSeverityLevel(complaintDto.getSeverityLevel());
+        complaint.setResolved(complaintDto.isResolved());
+        complaint.setLocalDateTime(complaintDto.getLocalDateTime() != null
+                ? complaintDto.getLocalDateTime() : java.time.LocalDateTime.now());
+        complaint.setUpVotes(complaintDto.getUpVotes());
+        complaint.setDownVotes(complaintDto.getDownVotes());
+        complaint.setFiledBy(user);
+
         Complaints savedComplaint = complaintService.fileComplaint(complaint);
         return ResponseEntity.ok(savedComplaint);
     }

@@ -1,11 +1,9 @@
 package com.flat.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flat.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,11 +37,12 @@ public class User implements UserDetails {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "filedBy" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "filedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Complaints> complaints = new ArrayList<>();
 
     @OneToMany(mappedBy = "votedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Transient
+    @JsonIgnore
     private List<Vote> votes = new ArrayList<>();
 
     public User() {
@@ -91,11 +90,8 @@ public class User implements UserDetails {
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", flatCode='" + flatCode + '\'' +
-                ", password='" + password + '\'' +
                 ", kPoints=" + kPoints +
                 ", role=" + role +
-                ", complaints=" + complaints +
-                ", votes=" + votes +
                 '}';
     }
 

@@ -41,11 +41,9 @@ public class UserController {
 
         String userName = jwtService.extractUserName(token.substring(7));
         User user =(User)  userRepository.findByEmail(userName);
-        if(user != null && user.getRole().equals(Role.ADMIN)|| user.getRole().equals(Role.USER)){
-
+        if (user != null && (user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.USER))) {
             return ResponseEntity.ok(userService.getAllUsers());
-        }
-        else{
+        } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }

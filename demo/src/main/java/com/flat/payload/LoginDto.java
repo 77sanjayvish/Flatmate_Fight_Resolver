@@ -5,6 +5,9 @@ public class LoginDto {
 
     private String password;
 
+    public LoginDto() {
+    }
+
     public String getEmail() {
         return email;
     }
