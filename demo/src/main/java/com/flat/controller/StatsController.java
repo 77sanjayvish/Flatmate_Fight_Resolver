@@ -24,7 +24,7 @@ public class StatsController {
         List<Complaints> complaints = complaintRepository.findAll();
         long totalComplaints = complaints.size();
         long resolvedComplaints = complaints.stream()
-                .filter(complaint -> "RESOLVED".equals(complaint.getComplainType()))
+                .filter(Complaints::isResolved)
                 .count();
         long openComplaints = totalComplaints - resolvedComplaints;
         Map<String, Object> stats = new HashMap<>();

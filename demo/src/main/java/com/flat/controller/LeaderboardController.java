@@ -21,7 +21,7 @@ public class LeaderboardController {
     @GetMapping("/leaderboard")
     public ResponseEntity<List<User>> getLeaderboard() {
         // Fetch users sorted by karmaPoints in descending order
-        List<User> leaderboard = userRepository.findAll(Sort.by(Sort.Direction.DESC, "karmaPoints"));
+        List<User> leaderboard = userRepository.findAll(Sort.by(Sort.Direction.DESC, "kPoints"));
         return ResponseEntity.ok(leaderboard);
     }
 }
